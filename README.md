@@ -1,6 +1,6 @@
-# Medusa-plugin-filestorage-local
+# Medusa-plugin-filestorage-strapi
 
-Store your images on your strapi server.
+Store your images on your strapi server installation.
 
 ## Available options (default configuration)
 
