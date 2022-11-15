@@ -49,9 +49,9 @@ class FileStorageService extends FileService {
 
   delete(fileUrl) {
     // The Promise resolve value is ignored
-    //throw fileUrl;
-    console.log(fileUrl);
-    return Promise.reject(fileUrl);
+    // throw fileUrl;
+    // console.log(fileUrl);
+    return Promise.resolve("deleted");
   }
 }
 
