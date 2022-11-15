@@ -1,44 +1,59 @@
 import { FileService } from "medusa-interfaces";
+const crypto = require("crypto");
+import dns from "node:dns";
 import fs from "fs";
 
+dns.setDefaultResultOrder("ipv4first");
+
 class FileStorageService extends FileService {
-    constructor({}, config) {
-        super();
-        this.config = {
-            serverBaseUrl: "http://localhost:9000",
-            saveInDatabase: false,
-            fileLocation: "uploads/persistent/",
-            ...config,
-        };
-        if (!fs.existsSync(this.config.fileLocation)) {
-            fs.mkdirSync(this.config.fileLocation);
-        }
-    }
+  constructor({}, options) {
+    super();
+    this.config = {
+      strapiUri: "http://localhost:1337",
+      strapiApiKey: "",
+      ...options,
+    };
+  }
 
-    // saves the image as a base64 encoded string in the database (in the url column)
-    upload(file) {
-        return new Promise((resolve, reject) => {
-            if (this.config.saveInDatabase) {
-                let data = fs.readFileSync(file.path, { encoding: "base64" });
-                resolve({
-                    url: `data:${file.mimetype};base64, ${data.toString("base64")}`,
-                });
-            } else {
-                fs.copyFile(file.path, this.config.fileLocation + file.filename, (err) => {
-                    if (err) throw err;
-                    resolve({
-                        url: this.config.serverBaseUrl + "/" + this.config.fileLocation + file.filename,
-                    });
-                });
-            }
+  upload(file) {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      //fetch upload
+      const filename = file.originalname;
+
+      let data = new Blob([fs.readFileSync(file.path)], {
+        type: file.mimetype,
+      });
+      formData.append(`files`, data, filename);
+      fetch(this.config.strapiUri + "/api/upload", {
+        method: "post",
+        headers: {
+          Authorization: "bearer " + this.config.strapiApiKey,
+          //  "Content-type": "multipart/form-data",
+        },
+        body: formData,
+      })
+        .then(async (response) => {
+          let res = await response.json();
+
+          resolve({
+            url: this.config.strapiUri + res[0].url,
+          });
+          //fs.unlinkSync(file.path);
+        })
+        .catch((err) => {
+          reject(err);
+          //fs.unlinkSync(file.path);
         });
-    }
+    });
+  }
 
-    delete(file) {
-        // The Promise resolve value is ignored
-        console.log(file);
-        return Promise.resolve("deleted");
-    }
+  delete(fileUrl) {
+    // The Promise resolve value is ignored
+    //throw fileUrl;
+    console.log(fileUrl);
+    return Promise.reject(fileUrl);
+  }
 }
 
 export default FileStorageService;
