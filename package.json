@@ -1,6 +1,6 @@
 {
     "name": "medusa-plugin-filestorage-strapi",
-    "version": "0.0.1",
+    "version": "0.0.3-alpha",
     "description": "integrate strapi media provider with medusajs",
     "main": "index.js",
     "repository": {
