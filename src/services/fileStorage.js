@@ -1,5 +1,4 @@
 import { FileService } from "medusa-interfaces";
-const crypto = require("crypto");
 import dns from "node:dns";
 import fs from "fs";
 

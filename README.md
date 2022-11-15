@@ -9,11 +9,11 @@ Store your images on your strapi server.
     resolve: `medusa-plugin-filestorage-strapi`,
     options: {
       // The baseurl for your strapi server
-      strapiUri: process.env.STRAPI_URI,
+      strapiUri: process.env.STRAPI_URI || "http://localhost:1337",
        
 
-      // API KEY WITH upload route access in strapi
-      strapiApiKey: STRAPI_API_KEY,
+      // API KEY with upload routes permissions in strapi
+      strapiApiKey: process.env.STRAPI_API_KEY || "",
     },
 }
 ```
