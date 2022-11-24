@@ -4,7 +4,8 @@
     "description": "integrate strapi media provider with medusajs",
     "main": "index.js",
     "repository": {
-        "type": "git"
+        "type": "git",
+        "url": "https://github.com/arro000/medusa-plugin-filestorage-strapi"
     },
     "scripts": {
         "build": "babel src -d .",
